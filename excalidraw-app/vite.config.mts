@@ -7,6 +7,7 @@ import checker from "vite-plugin-checker";
 import { createHtmlPlugin } from "vite-plugin-html";
 import Sitemap from "vite-plugin-sitemap";
 import { woff2BrowserPlugin } from "../scripts/woff2/woff2-vite-plugins";
+import { iterateVitePlugin } from "@iterate-ai/viteplugin";
 
 // To load .env.local variables
 const envVars = loadEnv("", `../`);
