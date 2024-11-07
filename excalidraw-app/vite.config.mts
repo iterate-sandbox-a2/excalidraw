@@ -1,13 +1,13 @@
-import { defineConfig, loadEnv } from "vite";
+import { iterateVitePlugin } from "@iterate-ai/viteplugin";
 import react from "@vitejs/plugin-react";
-import svgrPlugin from "vite-plugin-svgr";
-import { ViteEjsPlugin } from "vite-plugin-ejs";
-import { VitePWA } from "vite-plugin-pwa";
+import { defineConfig, loadEnv } from "vite";
 import checker from "vite-plugin-checker";
+import { ViteEjsPlugin } from "vite-plugin-ejs";
 import { createHtmlPlugin } from "vite-plugin-html";
+import { VitePWA } from "vite-plugin-pwa";
 import Sitemap from "vite-plugin-sitemap";
+import svgrPlugin from "vite-plugin-svgr";
 import { woff2BrowserPlugin } from "../scripts/woff2/woff2-vite-plugins";
-
 // To load .env.local variables
 const envVars = loadEnv("", `../`);
 // https://vitejs.dev/config/
@@ -53,6 +53,12 @@ export default defineConfig({
     assetsInlineLimit: 0,
   },
   plugins: [
+    iterateVitePlugin({
+      apiKey:
+        "c134bd372c5f417732ef06422d1f9ac118acc566db98d94862f2f43d3b7b2895",
+      organization: "iterate-sandbox-a2",
+      project: "excalidraw",
+    }) as Plugin,
     Sitemap({
       hostname: "https://excalidraw.com",
       outDir: "build",
