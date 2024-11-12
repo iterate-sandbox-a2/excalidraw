@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
+import type { ActionManager } from "../actions/manager";
+import type { AppClassProperties, BinaryFiles, UIAppState } from "../types";
 import mixpanel from "mixpanel-browser";
 import {
   actionChangeExportBackground,
@@ -8,7 +10,6 @@ import {
   actionChangeProjectName,
   actionExportWithDarkMode,
 } from "../actions/actionExport";
-import type { ActionManager } from "../actions/manager";
 import { probablySupportsClipboardBlob } from "../clipboard";
 import {
   DEFAULT_EXPORT_PADDING,
@@ -16,7 +17,6 @@ import {
   EXPORT_SCALES,
   isFirefox,
 } from "../constants";
-import type { AppClassProperties, BinaryFiles, UIAppState } from "../types";
 
 import { exportToCanvas } from "../../utils/export";
 import { canvasToBlob } from "../data/blob";
@@ -71,19 +71,19 @@ const ImageExportModal = ({
 }: ImageExportModalProps) => {
   const hasSelection = isSomeElementSelected(
     elementsSnapshot,
-    appStateSnapshot,
+    appStateSnapshot
   );
 
   const [projectName, setProjectName] = useState(name);
   const [exportSelectionOnly, setExportSelectionOnly] = useState(hasSelection);
   const [exportWithBackground, setExportWithBackground] = useState(
-    appStateSnapshot.exportBackground,
+    appStateSnapshot.exportBackground
   );
   const [exportDarkMode, setExportDarkMode] = useState(
-    appStateSnapshot.exportWithDarkMode,
+    appStateSnapshot.exportWithDarkMode
   );
   const [embedScene, setEmbedScene] = useState(
-    appStateSnapshot.exportEmbedScene,
+    appStateSnapshot.exportEmbedScene
   );
   const [exportScale, setExportScale] = useState(appStateSnapshot.exportScale);
 
@@ -108,7 +108,7 @@ const ImageExportModal = ({
   const { exportedElements, exportingFrame } = prepareElementsForExport(
     elementsSnapshot,
     appStateSnapshot,
-    exportSelectionOnly,
+    exportSelectionOnly
   );
 
   useEffect(() => {
@@ -187,7 +187,7 @@ const ImageExportModal = ({
                 actionManager.executeAction(
                   actionChangeProjectName,
                   "ui",
-                  event.target.value,
+                  event.target.value
                 );
               }}
             />
@@ -223,7 +223,7 @@ const ImageExportModal = ({
               actionManager.executeAction(
                 actionChangeExportBackground,
                 "ui",
-                checked,
+                checked
               );
             }}
           />
@@ -242,7 +242,7 @@ const ImageExportModal = ({
                 actionManager.executeAction(
                   actionExportWithDarkMode,
                   "ui",
-                  checked,
+                  checked
                 );
               }}
             />
@@ -261,7 +261,7 @@ const ImageExportModal = ({
               actionManager.executeAction(
                 actionChangeExportEmbedScene,
                 "ui",
-                checked,
+                checked
               );
             }}
           />
@@ -326,7 +326,7 @@ const ImageExportModal = ({
                   exportedElements,
                   {
                     exportingFrame,
-                  },
+                  }
                 );
                 onCopy();
               }}
