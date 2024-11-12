@@ -1,7 +1,7 @@
 import React from "react";
 import { useDevice, useExcalidrawSetAppState } from "../App";
 import DropdownMenu from "../dropdownMenu/DropdownMenu";
-
+import mixpanel from "mixpanel-browser";
 import * as DefaultItems from "./DefaultItems";
 
 import { UserList } from "../UserList";
@@ -38,6 +38,7 @@ const MainMenu = Object.assign(
           <DropdownMenu open={appState.openMenu === "canvas"}>
             <DropdownMenu.Trigger
               onToggle={() => {
+                mixpanel.track("main_button_clicked");
                 setAppState({
                   openMenu: appState.openMenu === "canvas" ? null : "canvas",
                 });
