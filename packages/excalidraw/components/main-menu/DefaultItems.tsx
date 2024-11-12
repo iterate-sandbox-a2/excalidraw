@@ -1,5 +1,6 @@
 import { getShortcutFromShortcutName } from "../../actions/shortcuts";
 import { useI18n } from "../../i18n";
+import mixpanel from "mixpanel-browser";
 import {
   useExcalidrawSetAppState,
   useExcalidrawActionManager,
@@ -114,7 +115,9 @@ export const SaveAsImage = () => {
     <DropdownMenuItem
       icon={ExportImageIcon}
       data-testid="image-export-button"
-      onSelect={() => setAppState({ openDialog: { name: "imageExport" } })}
+      onSelect={() => {
+        mixpanel.track('export_image_initiated');
+        setAppState({ openDialog: { name: "imageExport" } })}}
       shortcut={getShortcutFromShortcutName("imageExport")}
       aria-label={t("buttons.exportImage")}
     >

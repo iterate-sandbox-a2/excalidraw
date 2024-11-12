@@ -1,41 +1,41 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import type { ActionManager } from "../actions/manager";
-import type { AppClassProperties, BinaryFiles, UIAppState } from "../types";
-
+import mixpanel from "mixpanel-browser";
 import {
-  actionExportWithDarkMode,
   actionChangeExportBackground,
   actionChangeExportEmbedScene,
   actionChangeExportScale,
   actionChangeProjectName,
+  actionExportWithDarkMode,
 } from "../actions/actionExport";
+import type { ActionManager } from "../actions/manager";
 import { probablySupportsClipboardBlob } from "../clipboard";
 import {
   DEFAULT_EXPORT_PADDING,
   EXPORT_IMAGE_TYPES,
-  isFirefox,
   EXPORT_SCALES,
+  isFirefox,
 } from "../constants";
+import type { AppClassProperties, BinaryFiles, UIAppState } from "../types";
 
+import { exportToCanvas } from "../../utils/export";
 import { canvasToBlob } from "../data/blob";
 import { nativeFileSystemSupported } from "../data/filesystem";
 import type { NonDeletedExcalidrawElement } from "../element/types";
 import { t } from "../i18n";
 import { isSomeElementSelected } from "../scene";
-import { exportToCanvas } from "../../utils/export";
 
-import { copyIcon, downloadIcon, helpIcon } from "./icons";
 import { Dialog } from "./Dialog";
+import { copyIcon, downloadIcon, helpIcon } from "./icons";
 import { RadioGroup } from "./RadioGroup";
 import { Switch } from "./Switch";
 import { Tooltip } from "./Tooltip";
 
-import "./ImageExportDialog.scss";
-import { FilledButton } from "./FilledButton";
-import { cloneJSON } from "../utils";
 import { prepareElementsForExport } from "../data";
 import { useCopyStatus } from "../hooks/useCopiedIndicator";
+import { cloneJSON } from "../utils";
+import { FilledButton } from "./FilledButton";
+import "./ImageExportDialog.scss";
 
 const supportsContextFilters =
   "filter" in document.createElement("canvas").getContext("2d")!;
@@ -218,6 +218,7 @@ const ImageExportModal = ({
             name="exportBackgroundSwitch"
             checked={exportWithBackground}
             onChange={(checked) => {
+              mixpanel.track("background_toggle_clicked");
               setExportWithBackground(checked);
               actionManager.executeAction(
                 actionChangeExportBackground,
@@ -236,6 +237,7 @@ const ImageExportModal = ({
               name="exportDarkModeSwitch"
               checked={exportDarkMode}
               onChange={(checked) => {
+                mixpanel.track("dark_mode_toggle_clicked");
                 setExportDarkMode(checked);
                 actionManager.executeAction(
                   actionExportWithDarkMode,
@@ -286,11 +288,17 @@ const ImageExportModal = ({
           <FilledButton
             className="ImageExportModal__settings__buttons__button"
             label={t("imageExportDialog.title.exportToPng")}
-            onClick={() =>
+            onClick={() => {
+              mixpanel.track("image_exported", {
+                is_embed_scene_enabled: embedScene,
+                scale_factor: exportScale,
+                is_background_enabled: exportWithBackground,
+                is_dark_mode_enabled: exportDarkMode,
+              });
               onExportImage(EXPORT_IMAGE_TYPES.png, exportedElements, {
                 exportingFrame,
-              })
-            }
+              });
+            }}
             icon={downloadIcon}
           >
             {t("imageExportDialog.button.exportToPng")}
