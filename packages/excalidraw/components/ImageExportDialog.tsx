@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import type { ActionManager } from "../actions/manager";
 import type { AppClassProperties, BinaryFiles, UIAppState } from "../types";
-
+import mixpanel from "mixpanel-browser";
 import {
   actionExportWithDarkMode,
   actionChangeExportBackground,
@@ -218,6 +218,7 @@ const ImageExportModal = ({
             name="exportBackgroundSwitch"
             checked={exportWithBackground}
             onChange={(checked) => {
+              mixpanel.track("background_toggle_clicked");
               setExportWithBackground(checked);
               actionManager.executeAction(
                 actionChangeExportBackground,
@@ -236,6 +237,7 @@ const ImageExportModal = ({
               name="exportDarkModeSwitch"
               checked={exportDarkMode}
               onChange={(checked) => {
+                mixpanel.track("dark_mode_toggle_clicked");
                 setExportDarkMode(checked);
                 actionManager.executeAction(
                   actionExportWithDarkMode,
@@ -287,9 +289,16 @@ const ImageExportModal = ({
             className="ImageExportModal__settings__buttons__button"
             label={t("imageExportDialog.title.exportToPng")}
             onClick={() =>
-              onExportImage(EXPORT_IMAGE_TYPES.png, exportedElements, {
+              {
+                mixpanel.track("image_exported", {
+                  is_embed_scene_enabled: embedScene,
+                  scale_factor: exportScale,
+                  is_background_enabled: exportWithBackground,
+                  is_dark_mode_enabled: exportDarkMode,
+                });
+                onExportImage(EXPORT_IMAGE_TYPES.png, exportedElements, {
                 exportingFrame,
-              })
+              })}
             }
             icon={downloadIcon}
           >
