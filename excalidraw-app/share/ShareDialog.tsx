@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import mixpanel from 'mixpanel-browser';
 import { copyTextToSystemClipboard } from "../../packages/excalidraw/clipboard";
 import { trackEvent } from "../../packages/excalidraw/analytics";
 import { getFrame } from "../../packages/excalidraw/utils";
@@ -225,15 +226,7 @@ const ShareDialogPicker = (props: ShareDialogProps) => {
           </div>
 
           <div className="ShareDialog__picker__button">
-            <FilledButton
-              size="large"
-              label={t("exportDialog.link_button")}
-              icon={LinkIcon}
-              onClick={async () => {
-                await props.onExportToBackend();
-                props.handleClose();
-              }}
-            />
+            <FilledButton size="large" label={t("exportDialog.link_button")} icon={LinkIcon} onClick={async () => { await props.onExportToBackend(); props.handleClose(); mixpanel.track('export_image_initiated', { 'activeRoomLink': activeRoomLink }); }} />
           </div>
         </>
       )}

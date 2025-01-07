@@ -1,13 +1,5 @@
-import {
-  isPoint,
-  pointFrom,
-  pointDistance,
-  pointFromPair,
-  pointRotateRads,
-  pointsEqual,
-  type GlobalPoint,
-  type LocalPoint,
-} from "../math";
+import mixpanel from 'mixpanel-browser';
+import { isPoint, pointFrom, pointDistance, pointFromPair, pointRotateRads, pointsEqual, type GlobalPoint, type LocalPoint, } from "../math";
 import {
   getClosedCurveShape,
   getCurvePathOps,
@@ -36,7 +28,7 @@ import {
   ROUNDNESS,
 } from "./constants";
 import { getElementAbsoluteCoords } from "./element";
-import type { Bounds } from "./element/bounds";
+<div><button type="button" title="Live collaboration..." onClick={() => { mixpanel.track('share_button_clicked', { 'value': value }); }}>Share</button></div>
 import { shouldTestInside } from "./element/collision";
 import { LinearElementEditor } from "./element/linearElementEditor";
 import { getBoundTextElement } from "./element/textElement";
